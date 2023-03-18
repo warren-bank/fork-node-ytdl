@@ -13,8 +13,8 @@ const opts = require('commander')
   .option('-b, --begin <INT>', 'Time to begin video, format by 1:30.123 and 1m30s')
   .option('-o, --output <FILE>', 'Save to file, template by {prop}, default: stdout or {title}')
   .option('--filter <STR>',
-    'Can be video, videoonly, audio, audioonly',
-    /^(video|audio)(only)?$/)
+    'Can be video, videoonly, audio, audioonly, audioandvideo, videoandaudio',
+    /^(?:video|audio)(?:and(?:video|audio)|only)?$/)
   .option('--filter-container <REGEXP>', 'Filter in format container')
   .option('--unfilter-container <REGEXP>', 'Filter out format container')
   .option('--filter-resolution <REGEXP>', 'Filter in format resolution')
@@ -186,6 +186,12 @@ if (opts.infoJson) {
 
     case 'audioonly':
       filters.push(['audioonly', format => !hasVideo(format) && hasAudio(format)]);
+      break;
+
+    case 'audioandvideo':
+    case 'videoandaudio':
+      filters.push(['video', hasVideo]);
+      filters.push(['audio', hasAudio]);
       break;
   }
 
