@@ -8,9 +8,11 @@ const opts = require('commander')
   .action((a) => { url = a; })
   .option('-q, --quality <ITAG>',
     'Video quality to download, default: highest')
-  .option('-r, --range <INT>..<INT>',
+  .option('-r, --range <INT>-<INT>',
     'Byte range to download, ie 10355705-12452856')
-  .option('-b, --begin <INT>', 'Time to begin video, format by 1:30.123 and 1m30s')
+  .option('-t, --timerange <TIME>-<TIME>',
+    'Time range to download, ie 1m30s-2m30s')
+  .option('-b, --begin <TIME>', 'Time to begin video, format by 1:30.123 and 1m30s')
   .option('-o, --output <FILE>', 'Save to file, template by {prop}, default: stdout or {title}')
   .option('--filter <STR>',
     'Can be video, videoonly, audio, audioonly, audioandvideo, videoandaudio',
@@ -128,6 +130,10 @@ if (opts.infoJson) {
   if (opts.range) {
     let s = opts.range.split('-');
     ytdlOptions.range = { start: s[0], end: s[1] };
+  }
+  if (opts.timerange) {
+    let s = opts.timerange.split('-');
+    ytdlOptions.timerange = { start: s[0], end: s[1] };
   }
   ytdlOptions.begin = opts.begin;
 
