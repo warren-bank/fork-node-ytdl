@@ -40,7 +40,7 @@ if (!url) {
 
 const path         = require('path');
 const fs           = require('fs');
-const ytdl         = require('ytdl-core');
+const ytdl         = require('@warren-bank/ytdl-core');
 const homedir      = require('homedir');
 const util         = require('../lib/util');
 
