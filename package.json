@@ -26,6 +26,7 @@
     "test": "nyc --reporter=lcov --reporter=text-summary mocha -- test/*-test.js"
   },
   "dependencies": {
+    "@distube/ytdl-core": "*",
     "chalk": "^4.0.0",
     "cli-progress": "^3.8.2",
     "commander": "^6.2.1",
@@ -33,8 +34,7 @@
     "list-it": "^1.3.3",
     "lodash.throttle": "^4.1.1",
     "sanitize-filename": "^1.6.3",
-    "streamspeed": "^2.0.1",
-    "ytdl-core": "^4.5.0"
+    "streamspeed": "^2.0.1"
   },
   "devDependencies": {
     "mocha": "7.1.1",

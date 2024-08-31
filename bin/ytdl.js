@@ -38,7 +38,7 @@ if (!url) {
 
 const path         = require('path');
 const fs           = require('fs');
-const ytdl         = require('ytdl-core');
+const ytdl         = require('@distube/ytdl-core');
 const homedir      = require('homedir');
 const util         = require('../lib/util');
 
@@ -56,6 +56,10 @@ if (opts.cache !== false) {
       console.error(`Badly formatted cachefile (${cachefile}): ${err.message}`);
     }
   });
+
+  if (!ytdl.cache.sig) {
+    ytdl.cache.sig = require('@distube/ytdl-core/lib/sig').cache
+  }
 
   ytdl.cache.sig.get = key => cache[key];
   ytdl.cache.sig.set = (key, value) => {
