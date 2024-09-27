@@ -8,6 +8,7 @@ const opts = require('commander')
   .action((a) => { url = a; })
   .option('-q, --quality <ITAG>',
     'Video quality to download, default: highest')
+  .option('-c, --cookie <STR>', 'Cookie request header value.')
   .option('-r, --range <INT>..<INT>',
     'Byte range to download, ie 10355705-12452856')
   .option('-b, --begin <INT>', 'Time to begin video, format by 1:30.123 and 1m30s')
@@ -27,6 +28,18 @@ const opts = require('commander')
   .option('--no-cache', 'Skip file cache for html5player')
   .parse(process.argv)
   ;
+
+const requestOptions = {}
+if (opts.cookie) {
+  let cookie = opts.cookie.trim()
+
+  const name = 'cookie:'
+  if ((cookie.length >= name.length) && (cookie.substring(0, name.length).toLowerCase() === name)) {
+    cookie = cookie.substring(name.length, cookie.length).trim()
+  }
+
+  requestOptions.headers = {cookie}
+}
 
 const chalk = require('chalk');
 if (!url) {
@@ -92,12 +105,12 @@ const onError = (err) => {
 };
 
 if (opts.infoJson) {
-  ytdl.getInfo(url).then((info) => {
+  ytdl.getInfo(url, {requestOptions}).then((info) => {
     console.log(JSON.stringify(info));
   }, onError);
 } else if (opts.info) {
   const ListIt = require('list-it');
-  ytdl.getInfo(url).then((info) => {
+  ytdl.getInfo(url, {requestOptions}).then((info) => {
     printVideoInfo(info, info.formats.some(f => f.isLive));
 
     const formats = info.formats.map((format) => ({
@@ -204,12 +217,12 @@ if (opts.infoJson) {
   };
 
   if (opts.printUrl) {
-    ytdl.getInfo(url).then((info) => {
+    ytdl.getInfo(url, {requestOptions}).then((info) => {
       console.log(ytdl.chooseFormat(info.formats, ytdlOptions).url);
     }, onError);
 
   } else {
-    const readStream = ytdl(url, ytdlOptions);
+    const readStream = ytdl(url, {requestOptions, ...ytdlOptions});
     const stdoutMutable = process.stdout && process.stdout.cursorTo && process.stdout.clearLine;
 
 
